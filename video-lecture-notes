@@ -1,0 +1,217 @@
+SICP
+----
+
+* Video Lecture 1A
+What is computer science??
+Develop a way to talk precisely about "how to" knowledge. Imperative knowledge. Formalize.
+
+What is a process?
+a pattern of rules (procedure)
+
+SICP is about thecniques to Manage complexity of large systems
+
+Idealized components. we don't have to worry about tolerance. we can build whatever we can imagine :). There are no constraints of physical systems as other engineers have. "abstract engineering"
+
+Some techniques (course topics):
+- Black box abstractions.
+  - primitive objects
+  - means of combination
+  - means of abstraction
+  - capuring common patterns
+- conventional interfaces "aggreed uppon ways of putting things together"
+  - generic operations
+  - large-scale structure and modularity
+  - OO programming
+  - operations and aggregates
+- Building languages (metalinguistic abstractions) DSLs???
+
+1a part 2:
+
+A general framework for thinking about languages:
+What are the:
+* primitive elements
+* means of combination
+* means of abstraction
+
+Lisp:
+- primitive elements:
+3, 14.5, 5, +
+
+- means of combination:
+(+ 3 4 5) <- combination. applying an operator (+) to some operands (3 4 5)
+
+More comples: (+ 3 (* 5 6) 8 2) 
+
+Combinations can be represented as trees
+
+Use a decent editor ( preferrably with paredit ) 
+Indent your fucking code
+
+- means of abstraction:
+(define)
+ex .: (define a (*5 5))
+syntactic sugar define 
+(define (square x) (* x x))
+which is the same as 
+(define square (lambda (x) (* x x)))
+
+(cond)
+(cond ((condition) (dostuff))
+      ((condition2) (dodifferentstuff)))
+(if)
+
+1a part 3:
+recursion
+sqrt of x blah blah
+block structure - package internals inside the procedure
+
+
+1b
+substitution model
+
+kinds of expressions
+- numbers
+- symbols 
+- lambda expressions  |
+- definitions         | these are special cases.
+- conditionals        |
+- combinations
+  1 - evaluate the operator to get the procedure
+  2 - evaluate operands to get the arguments
+  3 - apply the procedure to the arguments
+    (How we apply a procedure)
+    1 - copy the body of the procedure substituting the arguments for the formal parameters of the procedure.
+      ex: substitute the X's for 4's
+    2 - evalute the resulting thing.
+
+"the key to understanding complicated things is to know where to NOT look at"
+
+
+- conditionals evaluation 
+  Giving names ( it is important ) 
+(if <predicate>
+    <consequent>
+    <alternative>)
+
+"evalueate the predicate, if TRUE, evaluante the consequent. Otherwise (else) evaluate the alternative.
+
+Peano Arithmetic
+(define (+ x y)
+  (if (= x 0)
+  y
+  (+ (dec x) (inc y))))
+
+
+<INCLUDE EXAMPLE OF evaluation>
+
+normal order of operation
+???
+
+1b sec 2 (17:00)
+
+back to the peano thingsy
+
+Two diff versions. 
+(define (+ x y)
+  (if (= x 0)
+  y
+  (+ (dec x) (inc y))))
+
+(+ 3 4)
+(+ 2 5)
+(+ 1 6)
+(+ 0 7)
+7
+
+(define (+ x y)
+  (if (= x 0)
+  y
+  (inc (+ (dec x)  y))))
+
+"like you were passing all to anther hand , one by one, and when its finished you sum" ( or something like it ) 
+(+ 3 4)
+(inc (+ 2 4))
+(inc (inc (+ 1 4)))
+(inc (inc (inc (+ 0 4))))
+(inc (inc (inc 4)))
+(inc (inc 5))
+(inc 6)
+7
+
+---
+1st example has a linear shape, 
+2nd gets bigger and then smaller,
+vertical axis is time
+horizontal is space
+it takes to finish the execution of the process
+1st takes proportional time of x to run
+(order of x, is proportional to X by some constant proportionality)
+space complexity is O(1).
+this is called an (also linear, see below) ITERATION
+time = O(x)
+space = O(1)
+this is executable in constant space.
+
+2nd 
+time = O(x) ( adds 2 lines for each time X increases 1) twices as many but constant still
+
+space = O(x) 3 times .
+this is called a LINEAR RECURSION
+linear becaus it's proportional to the input in both time and space
+
+
+LINEAR and RECURSIVE are in relation to the Process, not the Definition.
+both definitions are recursive but this has nothing to do with it.
+
+recursion has "more bureaucracy" the "iterations are kept in the loop
+
+an iteration is a system that has all of it state in explicit variables. If something where to happen with the following results, the computation could resume from the last step saved.
+
+a recursion can't do that. it would need to restart ( the things which have been deferred for later, in our case the (inc)'s .) 
+
+(pertubational analysis ??)
+
+1b pt 3 37:00
+ofibonnaci
+
+(define (fib n)
+  (if (< n 2)
+      n
+      (+ (fib (- n 1)
+         (fib (- n 2))))))
+
+                                fib4
+			 /                    \
+			fib3                 fib2
+		/            \             /        \ 
+	      fib2          fib1          fib1      fib0
+	 /          \         1             1          0
+       fib1        fib0
+        1            0
+
+this is inneficient because we compute the same fibs a lot if times ( fib2 twice in thsi case ) . And for each higher fib, we would need an entire new fib-1 tree .
+
+so the increase for each new step is exponential. time = O(fib(x))
+Since each step has to rememeber its entire path so it can go back to evaluate the new expressions, the space is the size of the longest path.
+space = O(n)
+
+
+towers of hanoi
+
+(define (move n from to spare)
+  (cond ((= n 0) "DONE")
+        (else
+	  (move (dec n) from spare to)
+	  (print-move from to)
+	  (move (dec n) spare to from))))
+
+(move 4 1 2 3)
+(move 3 1 3 2) (move 
+(move 2 1 2 3)
+(move 1 1 3 2)
+
+try to write a iterative algo instead of a recursive one.
+
+
+
+memoization ( recording results in a table that takes linear time to look up ) could improve the fibonnaci algo ./ 
