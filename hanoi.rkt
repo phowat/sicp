@@ -56,18 +56,19 @@
              ((can-move from spare "start" "spare" last-move)
               (legal-move
                (cdr from) to (cons (car from) spare) '("start" "spare")))
+             ((can-move spare to "spare" "finish" last-move)
+              (legal-move
+               from (cons (car spare) to) (cdr spare) '("spare" "finish")))
+             ((can-move spare from "spare" "start" last-move)
+              (legal-move
+               (cons (car spare) from) to (cdr spare) '("spare" "start")))
              ((can-move to spare "finish" "spare" last-move)
               (legal-move
                from (cdr to) (cons (car to) spare) '("finish" "spare")))
              ((can-move to from "finish" "start" last-move)
               (legal-move
                (cons (car to) from) (cdr to) spare '("finish" "start")))
-             ((can-move spare to "spare" "finish" last-move)
-              (legal-move
-               from (cons (car spare) to) (cdr spare) '("spare" "finish")))
-             ((can-move spare from "spare" "start" last-move)
-              (legal-move
-               (cons (car spare) from) to (cdr spare) '("spare" "start"))))))
+     )))
 
 (define (iterative-tower n)
   (let ([pieces (fifo n)])
