@@ -101,6 +101,7 @@ Peano Arithmetic
   y
   (+ (dec x) (inc y))))
 
+TODO NEIL/SICP: inc and dec are named differently in the lecutures
 
 <INCLUDE EXAMPLE OF evaluation>
 
@@ -215,3 +216,72 @@ try to write a iterative algo instead of a recursive one.
 
 
 memoization ( recording results in a table that takes linear time to look up ) could improve the fibonnaci algo ./ 
+
+
+Lecture 2a
+
+
+higher order functions. 
+
+commmon patterns of usage. 
+
+we can define a general pattern :
+
+(define (<name> a b)
+  (if (> a b)
+    0
+    (+ (<term> a)
+       (<name> (<next> a) b))))
+
+----
+
+(define (sum term a next b)
+  (if (> a b)
+    0 
+    (+ (term a)
+       (sum term (next a) next b))))
+
+
+-----
+
+now using the sum implement to sum of the integers
+
+(define (sum-int a b)
+  (define (indentity x) x)
+  (sum identity a inc b))
+
+ 
+2a pt 2 (23:00)
+
+Fixed point: a place which if you put into the function, you get the same value out.
+
+
+(define (sqrt x)
+  (fixed-point
+    (lambda (y) (average (/x y) y))
+    1))
+
+(define (fixed-point f start)
+  (define (iter old new)
+    (if (close-enuf? old new)
+        new
+	(iter new (f new))))
+  (iter start (f start)))
+
+oscilation
+
+(define (sqrt x)
+  (fixed-point
+    (average-damp (lambda (y) (/ x y)))
+    1))
+
+(define average-damp 
+  (lambda (f) 
+    (lambda (x) (average (f x) x))))
+
+2a pt 3 (43:00)
+
+newton's method. for finding the roots of a function f
+
+TODO neil/sicp : (square) 
+
